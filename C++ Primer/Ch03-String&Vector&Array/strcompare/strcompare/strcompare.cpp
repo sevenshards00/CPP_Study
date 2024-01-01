@@ -1,6 +1,6 @@
 ﻿/*
 * C++ Primer - String, Vector & Array (문자열, 벡터 그리고 배열)
-* 파일명: string_size3.cpp
+* 파일명: strcompare.cpp
 * 파일 버전: 0.1
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-01
