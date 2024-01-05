@@ -1,6 +1,6 @@
 ﻿/*
 * C++ Primer - Function (함수)
-* 파일명: printFcns.cpp
+* 파일명: printFcns.h
 * 파일 버전: 0.1
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-05
