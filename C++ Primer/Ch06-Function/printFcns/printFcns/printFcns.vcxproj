@@ -129,6 +129,10 @@
   <ItemGroup>
     <ClInclude Include="printFcns.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="printFcns.cpp" />
+    <ClCompile Include="printFcnsMain.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
