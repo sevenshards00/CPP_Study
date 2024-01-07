@@ -20,6 +20,7 @@ int main(int argc, const char* argv[])
 {
 	string numbers("0123456789"), name("r2d2");
 
+	// string에서 최초로 숫자가 나타나는 곳을 찾을 때
 	auto pos = name.find_first_of(numbers);
 	if (pos != string::npos)
 		cout << "found number at index: " << pos << " elements is " << name[pos] << endl;
@@ -28,19 +29,22 @@ int main(int argc, const char* argv[])
 
 	pos = 0;
 
+	// 반복문을 통해서 찾는 방법
 	while ((pos = name.find_first_of(numbers, pos)) != string::npos)
 	{
 		cout << "found number at index: " << pos << " elements is " << name[pos] << endl;
 
-		++pos;
+		++pos; // 다음 문자로 이동
 	}
 
 	string river("Mississippi");
 
-	auto first_pos = river.find("is");
-	auto last_pos = river.rfind("is");
+	// 정방향 탐색과 역방향 탐색
+	auto first_pos = river.find("is"); // 정방향
+	auto last_pos = river.rfind("is"); // 역방향
 	cout << "find returned: " << first_pos << " rfind returned: " << last_pos << endl;
 
+	// 반대로 string 내에서 숫자가 아닌 것을 찾는 경우
 	string dept("03714p3");
 	pos = dept.find_first_not_of(numbers);
 	cout << "first_no returned: " << pos << endl;
