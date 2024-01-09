@@ -28,6 +28,7 @@ using std::endl;
 #include <iterator>
 using std::inserter;
 using std::front_inserter;
+using std::back_inserter;
 
 #define LIST_INIT // 목록 초기화를 사용하는 경우 (C++11 표준 이상)
 
@@ -59,7 +60,7 @@ int main(int argc, const char *argv[])
 	list<int> lst3;
 
 	// copy를 통해 lst의 처음부터 끝까지 lst2에 복사, 앞에서부터 요소를 복사하므로 1-2-3-4순으로 리스트에 입력.
-	// front_inserter는 삽입할 때마다 첫 요소 앞에 요소를 삽입. (push_front)
+	// front_inserter는 삽입할 때마다 '항상' 첫 요소 앞에 요소를 삽입. (push_front)
 	// 그래서 lst2의 begin()이 계속 바뀌게 된다.
 	// 그래서 실제 리스트에는 4-3-2-1 순으로 저장된다.
 	copy(lst.cbegin(), lst.cend(), front_inserter(lst2));
@@ -74,12 +75,15 @@ int main(int argc, const char *argv[])
 #ifdef LIST_INIT // 목록 초기화를 사용하는 경우 (C++11 표준 이상)
 	vector<int> v = { 1, 2, 3, 4, 5 };
 	list<int> new_lst = { 6, 7, 8, 9 };
+	list<int> new_lst2 = new_lst;
 #else // 목록 초기화를 사용하지 않는 경우 (C++11 표준 미만)
 	vector<int> v(temp, temp + 5);
 	list<int> new_lst(temp + 5, end(temp));
 #endif
 	auto it = new_lst.begin(); // new_lst의 맨 처음 위치를 가리키는 반복자
-	copy(v.begin(), v.end(), inserter(new_lst, it)); // vector의 처음부터 끝까지 inserter의 시작 앞에 복사하게 된다. 
+	copy(v.begin(), v.end(), inserter(new_lst, it)); // vector의 처음부터 끝까지 inserter의 시작 앞에 복사.
+	copy(v.begin(), v.end(), back_inserter(new_lst2)); // vector의 처음부터 끝까지 new)lst2의 끝에서부터 복사.
 	print("new_lst", new_lst);
+	print("new_lst2", new_lst2);
 	return 0;
 }
