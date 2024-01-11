@@ -1,6 +1,6 @@
 ﻿/*
 * C++ Primer - Dynamic Memory & Smart Pointer (동적 메모리와 스마트 포인터)
-* 파일명: StrBlob.h
+* 파일명: useBlob.cpp
 * 파일 버전: 0.1
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-11
