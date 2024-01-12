@@ -1,37 +1,26 @@
 ﻿/*
 * C++ Primer - Dynamic Memory & Smart Pointer (동적 메모리와 스마트 포인터)
 * 파일명: StrBlob.h
-* 파일 버전: 0.1
+* 파일 버전: 0.2
 * 작성자: Sevenshards
-* 작성 일자: 2024-01-11
-* 이전 버전 작성 일자:
-* 버전 내용: StrBlob 클래스에서 share_ptr, weak_ptr 사용 예제 - StrBlob, StrBlobPtr클래스 정의
-* 이전 버전 내용:
+* 작성 일자: 2024-01-12
+* 이전 버전 작성 일자: 2024-01-11
+* 버전 내용: using 선언 제거
+* 이전 버전 내용: StrBlob 클래스에서 share_ptr, weak_ptr 사용 예제 - StrBlob, StrBlobPtr 클래스 정의
 */
 
 #ifndef __STRBLOB_H__
 #define __STRBLOB_H__
 
 #include <vector>
-using std::vector;
-
 #include <string>
-using std::string;
-
 #include <memory>
-using std::shared_ptr;
-using std::make_shared;
-using std::weak_ptr;
-
 #include <stdexcept>
-using std::runtime_error;
-using std::out_of_range;
 
 #define LIST_INIT // 목록 초기화를 사용하는 경우 (C++11 표준 이상)
 
 #ifdef LIST_INIT // 목록 초기화를 사용하는 경우 (C++11 표준 이상)
 #include <initializer_list>
-using std::initializer_list;
 #endif
 
 class StrBlobPtr; // friend 선언을 위해 StrBlob 클래스보다 전방에 선언.
@@ -42,15 +31,15 @@ class StrBlob
 {
 	friend class StrBlobPtr;
 public:
-	typedef vector<string>::size_type size_type;
+	typedef std::vector<std::string>::size_type size_type;
 private:
-	shared_ptr<vector<string>> data; // vector<string>을 가리키는 shared_ptr 변수
-	void check(size_type i, const string &msg) const; // 현재 지정한 색인을 벗어났는지 확인하기 위한 함수
+	std::shared_ptr<std::vector<std::string>> data; // vector<string>을 가리키는 shared_ptr 변수
+	void check(size_type i, const std::string &msg) const; // 현재 지정한 색인을 벗어났는지 확인하기 위한 함수
 public:
 	// 생성자
-	StrBlob() : data(make_shared<vector<string>>()) {}
+	StrBlob() : data(std::make_shared<std::vector<std::string>>()) {}
 #ifdef LIST_INIT // 목록 초기화를 사용하는 경우 (C++11 표준 이상)
-	StrBlob(initializer_list<string> il);
+	StrBlob(std::initializer_list<std::string> il);
 #else // 목록 초기화를 사용하지 않는 경우 (C++11 표준 미만)
 	StrBlob(string *, string *);
 #endif
@@ -61,14 +50,14 @@ public:
 	bool empty() const { return data->empty(); }
 
 	// vector 관련 삽입 연산
-	void push_back(const string &t) { data->push_back(t); }
+	void push_back(const std::string &t) { data->push_back(t); }
 	void pop_back();
 
 	// vector의 요소 접근 연산
-	string &front();
-	string &back();
-	const string& front() const;
-	const string& back() const;
+	std::string &front();
+	std::string &back();
+	const std::string& front() const;
+	const std::string& back() const;
 	
 	// StrBlobPtr에 대한 interface
 	// StrBlobPtr가 있어야 정의할 수 있다.
@@ -79,39 +68,39 @@ public:
 // StrBlob 클래스의 멤버 함수 정의
 // 생성자 정의
 #ifdef LIST_INIT // 목록 초기화를 사용하는 경우 (C++11 표준 이상)
-inline StrBlob::StrBlob(initializer_list<string> il)
-	:data(make_shared<vector<string>>(il)) {}
+inline StrBlob::StrBlob(std::initializer_list<std::string> il)
+	:data(std::make_shared<std::vector<std::string>>(il)) {}
 #else // 목록 초기화를 사용하지 않는 경우 (C++11 표준 미만)
-inline StrBlob::StrBlob(string *b, string *e)
-	: data(make_shared<vector<string>>(b, e)) { }
+inline StrBlob::StrBlob(std::string *b, std::string *e)
+	: data(std::make_shared<std::vector<std::string>>(b, e)) { }
 #endif
 
 // 현재 지정한 색인을 벗어났는지 확인하기 위한 함수
-void StrBlob::check(size_type i, const string &msg) const
+void StrBlob::check(size_type i, const std::string &msg) const
 {
 	if (i >= data->size()) // 현재 입력받은 index가 vector의 크기(범위)를 벗어났다면
-		throw out_of_range(msg); // 범위를 벗어났음을 알리는 예외를 발생시킨다.
+		throw std::out_of_range(msg); // 범위를 벗어났음을 알리는 예외를 발생시킨다.
 }
 
 // vector의 요소 접근 연산
-string& StrBlob::front()
+std::string& StrBlob::front()
 {
 	check(0, "front on empty StrBlob"); // 0과 함께 예외 발생 시 전달할 메세지를 전달.
 	return data->front(); // 예외가 발생하지 않는다면 return을 통해 vector의 front연산을 수행
 }
 
-string& StrBlob::back()
+std::string& StrBlob::back()
 {
 	check(0, "back on empty StrBlob"); // 0과 함께 예외 발생 시 전달할 메세지를 전달.
 	return data->back(); // 예외가 발생하지 않는다면 return을 통해 vector의 back연산을 수행
 }
 // const 버전
-const string& StrBlob::front() const
+const std::string& StrBlob::front() const
 {
 	check(0, "front on empty StrBlob"); // 0과 함께 예외 발생 시 전달할 메세지를 전달.
 	return data->front(); // 예외가 발생하지 않는다면 return을 통해 vector의 front연산을 수행
 }
-const string& StrBlob::back() const
+const std::string& StrBlob::back() const
 {
 	check(0, "back on empty StrBlob"); // 0과 함께 예외 발생 시 전달할 메세지를 전달.
 	return data->back(); // 예외가 발생하지 않는다면 return을 통해 vector의 back연산을 수행
@@ -136,8 +125,8 @@ class StrBlobPtr
 	// 비멤버 함수, friend 선언을 통해서 StrBlobPtr에 있는 멤버에 접근 가능하다.
 	friend bool eq(const StrBlobPtr &, const StrBlobPtr &);
 private:
-	shared_ptr<vector<string>> check(size_t, const string &) const; // 대상으로 가리키는 vector가 존재하는지 확인하는 함수
-	weak_ptr<vector<string>> wptr; // weak_ptr 변수
+	std::shared_ptr<std::vector<std::string>> check(size_t, const std::string &) const; // 대상으로 가리키는 vector가 존재하는지 확인하는 함수
+	std::weak_ptr<std::vector<std::string>> wptr; // weak_ptr 변수
 	size_t curr; // vector 내의 현재 위치(인덱스)
 public:
 	// 생성자
@@ -153,22 +142,22 @@ public:
 
 // StrBlobPtr 클래스의 멤버 함수 정의
 // 역참조 연산자(dereference)의 역할을 하는 함수
-inline string& StrBlobPtr::deref() const
+inline std::string& StrBlobPtr::deref() const
 {
 	auto p = check(curr, "dereference past end"); // 현재 인덱스가 끝을 지나서 참조할 경우 예외 발생.
 	return (*p)[curr]; // 그게 아니라면 vector의 인덱스 접근.
 }
 // StrBlobPtr 클래스의 check 함수
 // 여기서는 StrBlob의 check와 달리 하나를 더 확인한다.
-inline shared_ptr<vector<string>> StrBlobPtr::check(size_t i, const string& msg) const
+inline std::shared_ptr<std::vector<std::string>> StrBlobPtr::check(size_t i, const std::string& msg) const
 {
 	auto ret = wptr.lock(); // 현재 shared_ptr이 가리키는 vector가 아직 존재하는지를 확인.
 	if (!ret) // vector가 존재하지 않는다면 이미 할당이 해제된 것으로 NULL shared_ptr이 반환됨
-		throw runtime_error("unbound StrBlobPtr"); // runtime_error 예외를 발생시킨다. 없는 영역을 참조하려 했기 떄문
+		throw std::runtime_error("unbound StrBlobPtr"); // runtime_error 예외를 발생시킨다. 없는 영역을 참조하려 했기 떄문
 
 	// 이 부분은 StrBlob의 check와 동일.
 	if (i >= ret->size())
-		throw out_of_range(msg);
+		throw std::out_of_range(msg);
 	
 	return ret; // 문제가 없다면 vector를 가리키는 weak_ptr을 반환.
 }

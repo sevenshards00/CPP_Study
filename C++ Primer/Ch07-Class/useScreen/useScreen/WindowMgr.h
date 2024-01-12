@@ -13,20 +13,15 @@
 #define __WINDOW_MGR__
 
 #include <vector>
-using std::vector;
-
 #include <string>
-using std::string;
-
 #include <iostream>
-using std::ostream;
 
 #include "Screen.h"
 
 class BitMap;
 
 // BitMap 클래스의 storeOn 함수 오버로딩
-extern ostream& storeOn(ostream&, Screen&);
+extern std::ostream& storeOn(std::ostream&, Screen&);
 extern BitMap& storeOn(BitMap&, Screen&);
 
 class Window_mgr
@@ -34,10 +29,10 @@ class Window_mgr
 private:
 	// Windows_mgr이 기본으로 설정하는 Screen.
 	// Windows_mgr에서는 24x80의 빈 화면을 가진다.
-	vector<Screen> screens{ Screen(24, 80, ' ') };
+	std::vector<Screen> screens{ Screen(24, 80, ' ') };
 public:
 	// 창의 각 화면에 대한 위치 ID
-	using ScreenIndex = vector<Screen>::size_type;
+	using ScreenIndex = std::vector<Screen>::size_type;
 
 	// Screen을 추가하고 해당 인덱스를 반환하는 함수
 	ScreenIndex addScreen(const Screen&);
@@ -63,7 +58,7 @@ void Window_mgr::clear(ScreenIndex i)
 	// s는 clear하기 원하는 Screen에 대한 참조자
 	Screen& s = screens[i];
 	// 화면의 내용을 전부 공백으로 바꾼다.
-	s.contents = string(s.height * s.width, ' ');
+	s.contents = std::string(s.height * s.width, ' ');
 }
 
 inline

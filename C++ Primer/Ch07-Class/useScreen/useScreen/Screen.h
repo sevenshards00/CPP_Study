@@ -1,19 +1,16 @@
 ﻿/*
 * C++ Primer - Class (클래스)
 * 파일명: Screen.h
-* 파일 버전: 0.1
+* 파일 버전: 0.2
 * 작성자: Sevenshards
-* 작성 일자: 2024-01-06
-* 이전 버전 작성 일자:
-* 버전 내용: 추가적인 클래스 기능 - Screen 헤더 파일
-* 이전 버전 내용:
+* 작성 일자: 2024-01-12
+* 이전 버전 작성 일자: 2024-01-06
+* 버전 내용: using 선언 제거
+* 이전 버전 내용: 추가적인 클래스 기능 - Screen 헤더 파일
 */
 
 #include <string>
-using std::string;
-
 #include <iostream>
-using std::ostream;
 
 #define IN_CLASS_INITS // 클래스 내 초기화 사용
 #define DEFAULT_FCNS // C++11 표준 기본 생성자 사용
@@ -21,7 +18,7 @@ using std::ostream;
 class Screen
 {
 public:
-	typedef string::size_type pos; // 타입 멤버 정의
+	typedef std::string::size_type pos; // 타입 멤버 정의
 private:
 	static const char bkground = ' ';
 #ifdef IN_CLASS_INITS // 클래스 내 초기화를 사용할 경우
@@ -31,9 +28,9 @@ private:
 	pos cursor;
 	pos height, width;
 #endif
-	string contents;
+	std::string contents;
 	// 화면에 표시하는 작업을 수행하는 멤버 함수 (private)
-	void do_display(ostream& os) const { os << contents; }
+	void do_display(std::ostream& os) const { os << contents; }
 public:
 	// 클래스 내 초기화를 사용할 경우 + C++11 표준 기본 생성자 사용할 경우
 #if defined(IN_CLASS_INITS) && defined(DEFAULT_FCNS)
@@ -61,13 +58,13 @@ public:
 	Screen& move(pos r, pos c); // 외부 정의에서 inline화 가능
 
 	// 멤버 함수 중 private 멤버 함수를 이용
-	Screen& display(ostream& os)
+	Screen& display(std::ostream& os)
 	{
 		do_display(os);
 		return *this;
 	}
 	// 객체에 대해 const 여부 또한 함수 오버로딩 가능
-	const Screen& display(ostream& os) const
+	const Screen& display(std::ostream& os) const
 	{
 		do_display(os);
 		return *this;
@@ -78,7 +75,7 @@ public:
 // 별도의 소스파일로 만들어도 된다.
 Screen& Screen::clear(char c)
 {
-	contents = string(height * width, c);
+	contents = std::string(height * width, c);
 	return *this;
 }
 
