@@ -1,6 +1,6 @@
 ﻿/*
 * C++ Primer - Copy Control (복사 제어)
-* 파일명: HasPtrValueLike.cpp
+* 파일명: HasPtrUseCount.cpp
 * 파일 버전: 0.1
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-14
@@ -69,9 +69,9 @@ public:
 	{
 		// shared_ptr처럼 행동하므로 무조건 할당을 해제하면 안된다.
 		// 참조 횟수를 확인하고 0이 되었을 때 할당을 해제한다.
-		
+
 		cout << "Call Destructor" << endl;
-		
+
 		if (--(*use) == 0)
 		{
 			delete ps;
