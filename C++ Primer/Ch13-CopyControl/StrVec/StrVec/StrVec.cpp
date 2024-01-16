@@ -3,10 +3,10 @@
 * 파일명: StrVec.cpp
 * 파일 버전: 0.1
 * 작성자: Sevenshards
-* 작성 일자: 2024-01-15
-* 이전 버전 작성 일자:
-* 버전 내용: 복사 제어 예제 - Vector<string> 흉내내기 - StrVec class 구현
-* 이전 버전 내용:
+* 작성 일자: 2024-01-16
+* 이전 버전 작성 일자: 2024-01-15
+* 버전 내용: 이동 생성자, 이동 대입 연산자 추가
+* 이전 버전 내용: 복사 제어 예제 - Vector<string> 흉내내기 - StrVec class 구현
 */
 
 #include <string>
@@ -64,18 +64,86 @@ StrVec &StrVec::operator=(const StrVec &rhs)
 	return *this;
 }
 
+#ifdef NOEXCEPT // C++11 표준 이후 noexcept를 사용할 경우
+// 이동 생성자
+// 생성자와 비슷하지만 하나 추가로 처리해야 할 부분이 있음
+StrVec::StrVec(StrVec &&s) noexcept
+	:elements(s.elements), first_free(s.first_free), cap(s.cap)
+{
+	// s에서 객체가 '이동'을 한 이후 소멸자 호출 시 안전하게 소멸될 수 있도록 처리
+	s.elements = nullptr;
+	s.first_free = nullptr;
+	s.cap = nullptr;
+}
+// 이동 대입 연산자
+StrVec &StrVec::operator=(StrVec &&rhs) noexcept
+{
+	// 만약 자기자신을 대입하는 것이 아니라면
+	if (this != &rhs)
+	{
+		free(); // 기존의 요소를 해제하고
+		// 자원을 이동한다
+		elements = rhs.elements; 
+		first_free = rhs.first_free;
+		cap = rhs.cap;
+		// 자원을 이동한 후에는 이동을 마친 객체를 소멸을 해도 안전한 상태가 되도록 한다.
+		rhs.elements = nullptr;
+		rhs.first_free = nullptr;
+		rhs.cap = nullptr;
+	}
+	return *this;
+}
 // 소멸자
-StrVec::~StrVec()
+StrVec::~StrVec() noexcept
 {
 	free();
 }
+#else // C++11 표준 미만 noexcept를 사용하지 않을 경우
+// 이동 생성자
+StrVec::StrVec(StrVec &&) throw()
+	:elements(s.elements), first_free(s.first_free), cap(s.cap)
+{
+	// s에서 객체가 '이동'을 한 이후 소멸자 호출 시 안전하게 소멸될 수 있도록 처리
+	s.elements = nullptr;
+	s.first_free = nullptr;
+	s.cap = nullptr;
+}
+// 이동 대입 연산자
+StrVec &StrVec::operator=(StrVec &&) throw()
+{
+	if (this != &rhs)
+	{
+		free(); // 기존의 요소를 해제하고
+		// 자원을 이동한다
+		elements = rhs.elements;
+		first_free = rhs.first_free;
+		cap = rhs.cap;
+		// 자원을 이동한 후에는 이동을 마친 객체를 소멸을 해도 안전한 상태가 되도록 한다.
+		rhs.elements = nullptr;
+		rhs.first_free = nullptr;
+		rhs.cap = nullptr;
+	}
+	return *this;
+}
+// 소멸자
+StrVec::~StrVec() throw()
+{
+	free();
+}
+#endif
 
 // vector에서 제공하는 기본 연산들의 멤버 함수
-// push_back -> 요소 복사
+// push_back -> 요소 복사 버전
 void StrVec::push_back(const string &s)
 {
 	chk_n_alloc(); // capacity가 충분한지 먼저 확인 -> 아니라면 재할당됨
 	alloc.construct(first_free++, s); // first_free가 가리키고 있는 위치에 요소를 추가.  -> 여기서 string의 복사 생성자 호출.
+}
+// push_back -> 요소 이동 버전
+void StrVec::push_back(std::string &&s)
+{
+	chk_n_alloc(); // 필요 시에 재할당을 하고
+	alloc.construct(first_free++, std::move(s)); // 라이브러리 move 함수를 이용하여 요소를 이동한다.
 }
 
 // alloc_n_copy -> vector간 복사 및 대입에서 사용

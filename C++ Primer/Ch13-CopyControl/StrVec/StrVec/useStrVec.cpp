@@ -1,12 +1,12 @@
 ﻿/*
 * C++ Primer - Copy Control (복사 제어)
 * 파일명: useStrVec.h
-* 파일 버전: 0.1
+* 파일 버전: 0.2
 * 작성자: Sevenshards
-* 작성 일자: 2024-01-15
-* 이전 버전 작성 일자:
-* 버전 내용: 복사 제어 예제 - Vector<string> 흉내내기 - StrVec을 사용하는 main 프로그램
-* 이전 버전 내용:
+* 작성 일자: 2024-01-16
+* 이전 버전 작성 일자: 2024-01-15
+* 버전 내용: 이동 생성자, 이동 대입 연산자 추가
+* 이전 버전 내용: 복사 제어 예제 - Vector<string> 흉내내기 - StrVec을 사용하는 main 프로그램
 */
 
 #include "StrVec.h"
@@ -85,7 +85,8 @@ int main(int argc, const char *argv[])
 
 	StrVec vec;  // 비어있는 StrVec
 	string s = "some string or another";
-	vec.push_back(s);      // push_back(const string&)
+	vec.push_back(s);      // push_back(const string&, 복사)
+	vec.push_back("done"); // calls push_back(string&&, 이동)
 
 	return 0;
 }

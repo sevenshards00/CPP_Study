@@ -4,9 +4,9 @@
 * 파일 버전: 0.1
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-15
-* 이전 버전 작성 일자:
-* 버전 내용: 복사 제어 예제 - Vector<string> 흉내내기 - StrVec class 정의
-* 이전 버전 내용:
+* 이전 버전 작성 일자: 2024-01-15
+* 버전 내용: 이동 생성자, 이동 대입 연산자 추가
+* 이전 버전 내용: 복사 제어 예제 - Vector<string> 흉내내기 - StrVec class 정의
 */
 #ifndef __STRVEC_H__
 #define __STRVEC_H__
@@ -16,6 +16,7 @@
 #include <utility>
 
 #define INIT_LIST
+#define NOEXCEPT
 
 #ifdef INIT_LIST // C++11 표준 이상 목록 초기화를 사용하는 경우
 #include <initializer_list>
@@ -35,16 +36,35 @@ public:
 #else
 	StrVec(const std::string *, const std::string *);
 #endif
+	// 복사 연산
 	// 복사 생성자
 	StrVec(const StrVec &);
 	// 대입 연산자 오버로딩(복사 대입)
 	StrVec &operator=(const StrVec &);
+
+	// 이동 연산
+#ifdef NOEXCEPT // C++11 표준 이후 noexcept를 사용할 경우
+	// 이동 생성자
+	StrVec(StrVec &&) noexcept;
+	// 이동 대입 연산자
+	StrVec &operator=(StrVec &&) noexcept;
 	// 소멸자
-	~StrVec();
+	~StrVec() noexcept;
+#else // C++11 표준 미만 noexcept를 사용하지 않을 경우
+	// 이동 생성자
+	StrVec(StrVec &&) throw();
+	// 이동 대입 연산자
+	StrVec &operator=(StrVec &&) throw();
+	// 소멸자
+	~StrVec() throw();
+#endif
+	
 
 	// vector에서 제공하는 기본 연산들의 멤버 함수
-	// push_back -> 요소 복사
+	// push_back -> 요소 복사 버전
 	void push_back(const std::string &);
+	// push_back -> 요소 이동 버전
+	void push_back(std::string &&);
 	// size
 	size_t size() const { return first_free - elements; }
 	// capacity
