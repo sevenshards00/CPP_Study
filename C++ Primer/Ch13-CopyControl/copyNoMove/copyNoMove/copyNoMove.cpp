@@ -4,9 +4,9 @@
 * 파일 버전: 0.1
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-17
-* 이전 버전 작성 일자:
-* 버전 내용: 이동 생성자가 없을 경우에는 복사 생성자가 실행되는 예제
-* 이전 버전 내용:
+* 이전 버전 작성 일자: 2024-01-17
+* 버전 내용: 이동 생성자 추가
+* 이전 버전 내용: 이동 생성자가 없을 경우에는 복사 생성자가 실행되는 예제
 */
 
 #include <utility>
@@ -24,9 +24,13 @@ public:
 #endif
 	Foo(const Foo &); // 복사 생성자
 	// 이동 생성자는 정의하지 않음.
+	// 주석을 풀고 이동 생성자를 정의하면 결과가 다르다.
+	//Foo(Foo &&) noexcept;
 };
-
+// 복사 생성자
 Foo::Foo(const Foo &) { std::cout << "Foo Copy Constructor Called" << std::endl; }
+// 이동 생성자
+//Foo::Foo(Foo &&) noexcept { std::cout << "Foo Move Constructor Called" << std::endl; }
 
 int main()
 {
