@@ -1,12 +1,12 @@
 ﻿/*
 * C++ Primer - Object Oriented Programming (객체 지향 프로그래밍)
 * 파일명: Quote.cpp
-* 파일 버전: 0.1
+* 파일 버전: 0.2
 * 작성자: Sevenshards
 * 작성 일자: 2024-01-19
-* 이전 버전 작성 일자:
-* 버전 내용: 상속 기본 예제 - 서적 판매 견적서(Quote, Bulk_quote 클래스 구현부)
-* 이전 버전 내용:
+* 이전 버전 작성 일자: 2024-01-19
+* 버전 내용: Disc_quote 클래스 추가 (리팩터링)
+* 이전 버전 내용: 상속 기본 예제 - 서적 판매 견적서(Quote, Bulk_quote 클래스 구현부)
 */
 
 #include "Quote.h"
@@ -42,7 +42,7 @@ double print_total(ostream &os, const Quote &item, size_t n)
 // override 키워드는 멤버 함수를 정의할 때 없어도 된다.
 double Bulk_quote::net_price(std::size_t cnt) const
 {
-	if (cnt >= min_qty) // 구매 최소 수량보다 이상이라면
+	if (cnt >= quantity) // 구매 최소 수량보다 이상이라면
 		return cnt * (1 - discount) * price; // 할인된 가격을 반환
 	else // 그게 아니라면
 		return cnt * price; // 정상 가격 반환
