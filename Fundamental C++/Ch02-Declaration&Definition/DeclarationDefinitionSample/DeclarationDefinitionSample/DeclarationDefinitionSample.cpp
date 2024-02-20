@@ -1,5 +1,5 @@
 ﻿/*
-* Fundamental C++ - Ch01-Type
+* Fundamental C++ - Ch02-Declaration&Definition
 * 파일명: DeclarationDefinitionSample.cpp
 * 파일 버전: 0.1
 * 작성자: Sevenshards
